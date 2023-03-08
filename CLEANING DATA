@@ -1,0 +1,47 @@
+SELECT *
+FROM KDRAMA..kdramadata
+
+-- DIVIDE AIR_DATE INTO FIRST EMITION AND LAST EMITION 
+Select Aired_Date
+from KDRAMA..Kdramadata
+-- AIRED DATE 
+Select 
+SUBSTRING(Aired_Date, 1, CHARINDEX('-', Aired_Date)) as AiredDate
+from KDRAMA..kdramadata
+-- ENDING DATE 
+Select
+SUBSTRING(Aired_Date,CHARINDEX('-', Aired_Date) +1, LEN(Aired_Date)) as EndingDate
+from KDRAMA..kdramadata
+
+--UPDATE THE TABLES WITH THE NEW COLUMNS 
+-- adding AIRED DATE COLUMN 
+ALTER TABLE KDRAMA..kdramadata
+add AiredDate1 Nvarchar(255);
+
+UPDATE KDRAMA..kdramadata
+SET AiredDate1 = SUBSTRING(Aired_Date, 1, CHARINDEX('-', Aired_Date))
+--ADDING ENDINGDATE  COLUMN
+
+ALTER TABLE KDRAMA..kdramadata
+add EndingDate Nvarchar(255);
+
+UPDATE KDRAMA..kdramadata
+SET EndingDate = SUBSTRING(Aired_Date,CHARINDEX('-', Aired_Date) +1, LEN(Aired_Date))
+
+--DELETE COLUMS WE ARE NOT USING
+ALTER TABLE KDRAMA..kdramadata 
+DROP column Aired_Date
+ALTER TABLE KDRAMA..kdramadata 
+DROP column AiredDate1
+
+
+Select COUNT(Name)
+From KDRAMA..kdramadata 
+Where Genre like '%HORROR%'
+
+
+-- then trim '-' with function REPLACE
+ALTER TABLE KDRAMA..kdramadata
+add Aired_Date Nvarchar(255);
+UPDATE KDRAMA..kdramadata
+SET Aired_Date = REPLACE(AiredDate1,'-',' ')
